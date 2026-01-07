@@ -82,6 +82,16 @@ Complexity-aware pruning across semantic, lexical, and symbolic layers
 
 <div align="center">
 
+**Speed Comparison Demo**
+
+<video src="https://github.com/aiming-lab/SimpleMem/raw/main/fig/simplemem-new.mp4" controls width="900"></video>
+
+*SimpleMem vs. Baseline: Real-time speed comparison demonstration*
+
+</div>
+
+<div align="center">
+
 **LoCoMo-10 Benchmark Results (GPT-4.1-mini)**
 
 | Model | ⏱️ Construction Time | 🔎 Retrieval Time | ⚡ Total Time | 🎯 Average F1 |
