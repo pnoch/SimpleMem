@@ -11,7 +11,7 @@ from dataclasses import dataclass, asdict
 
 from .auth.models import User, MemoryEntry
 from .database.vector_store import MultiTenantVectorStore
-from .integrations.openrouter import OpenRouterClientManager
+from .integrations.ollama import OllamaClientManager
 from .core.memory_builder import MemoryBuilder
 from .core.retriever import Retriever
 from .core.answer_generator import AnswerGenerator
@@ -57,7 +57,7 @@ class MCPHandler:
         user: User,
         api_key: str,
         vector_store: MultiTenantVectorStore,
-        client_manager: OpenRouterClientManager,
+        client_manager: OllamaClientManager,
         settings: Any,
     ):
         self.user = user

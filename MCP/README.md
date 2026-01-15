@@ -12,7 +12,7 @@ SimpleMem MCP Server is a cloud-hosted long-term memory service for LLM agents, 
 - **Hybrid Retrieval**: Semantic search + keyword matching + metadata filtering
 - **Intelligent Planning**: Automatic query decomposition and reflection for complex queries
 - **Multi-tenant Isolation**: Per-user data tables with token authentication
-- **OpenRouter Integration**: Powered by OpenRouter's LLM and Embedding services
+- **Local Ollama Integration**: Uses your local Ollama models for LLM and embeddings
 - **Production Optimized**: Faster response times compared to the academic reference implementation
 
 ## Architecture
@@ -45,8 +45,8 @@ SimpleMem MCP Server is a cloud-hosted long-term memory service for LLM agents, 
 │  └─────────────────── LanceDB ──────────────────────────┘     │
 │                                                                 │
 │  ┌──────────────────────────────────────────────────────────┐  │
-│  │               OpenRouter API Integration                  │  │
-│  │  LLM: openai/gpt-4.1-mini    Embed: qwen/qwen3-embed-4b  │  │
+│  │                  Local Ollama Integration                 │  │
+│  │  LLM: llama3.1:8b-instruct   Embed: nomic-embed-text     │  │
 │  └──────────────────────────────────────────────────────────┘  │
 │                                                                 │
 └─────────────────────────────────────────────────────────────────┘
@@ -54,16 +54,7 @@ SimpleMem MCP Server is a cloud-hosted long-term memory service for LLM agents, 
 
 ## Quick Start
 
-### Using the Cloud Service
-
-The easiest way to use SimpleMem is via our hosted service at **https://mcp.simplemem.cloud**
-
-1. Visit `https://mcp.simplemem.cloud`
-2. Enter your OpenRouter API Key
-3. Get your authentication token
-4. Configure your MCP client (see below)
-
-### Self-Hosting
+### Local Quick Start (Ollama)
 
 #### 1. Install Dependencies
 
@@ -77,9 +68,13 @@ pip install -r requirements.txt
 #### 2. Configure Environment Variables (Optional)
 
 ```bash
-# Production environment recommended settings
+# Optional environment settings
 export JWT_SECRET_KEY="your-secure-random-secret-key"
 export ENCRYPTION_KEY="your-32-byte-encryption-key!!"
+export OLLAMA_BASE_URL="http://localhost:11434"
+export OLLAMA_LLM_MODEL="llama3.1:8b-instruct"
+export OLLAMA_EMBED_MODEL="nomic-embed-text"
+export OLLAMA_EMBED_DIM="768"
 ```
 
 #### 3. Start the Server
@@ -154,7 +149,7 @@ Add to your MCP JSON settings:
 {
   "mcpServers": {
     "simplemem": {
-      "url": "https://mcp.simplemem.cloud/mcp",
+      "url": "http://localhost:8000/mcp",
       "headers": {
         "Authorization": "Bearer YOUR_TOKEN"
       }

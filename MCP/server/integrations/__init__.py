@@ -1,5 +1,5 @@
 """External integrations for SimpleMem"""
 
-from .openrouter import OpenRouterClient
+from .ollama import OllamaClient
 
-__all__ = ["OpenRouterClient"]
+__all__ = ["OllamaClient"]

@@ -17,20 +17,9 @@
             <!-- Registration Form -->
             <section id="register-section" class="card">
                 <h2>Get Started</h2>
-                <p class="description">Enter your OpenRouter API Key to create your personal memory server instance.</p>
+                <p class="description">Generate a local access token to use this memory server from MCP clients.</p>
 
                 <form id="register-form">
-                    <div class="input-group">
-                        <label for="api-key">OpenRouter API Key</label>
-                        <input
-                            type="password"
-                            id="api-key"
-                            placeholder="sk-or-v1-..."
-                            autocomplete="off"
-                            required
-                        >
-                        <p class="input-hint">Get your API key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>. This is NOT an OpenAI key.</p>
-                    </div>
                     <button type="submit" id="submit-btn">
                         <span class="btn-text">Get Access Token</span>
                         <span class="btn-loading" style="display: none;">
@@ -41,7 +30,7 @@
                 </form>
 
                 <p class="note">
-                    Your API key is encrypted and securely stored. It's only used to call OpenRouter APIs on your behalf.
+                    This server uses your local Ollama models for memory extraction and embeddings.
                 </p>
             </section>
 
@@ -80,7 +69,7 @@
                     </p>
                 </div>
 
-                <button class="secondary-btn" onclick="resetForm()">Register Another Key</button>
+                <button class="secondary-btn" onclick="resetForm()">Generate Another Token</button>
             </section>
 
             <!-- Error Section -->

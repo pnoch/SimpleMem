@@ -7,7 +7,6 @@ const registerSection = document.getElementById('register-section');
 const resultSection = document.getElementById('result-section');
 const errorSection = document.getElementById('error-section');
 const registerForm = document.getElementById('register-form');
-const apiKeyInput = document.getElementById('api-key');
 const submitBtn = document.getElementById('submit-btn');
 const btnText = submitBtn.querySelector('.btn-text');
 const btnLoading = submitBtn.querySelector('.btn-loading');
@@ -23,12 +22,6 @@ registerForm.addEventListener('submit', handleRegister);
 async function handleRegister(e) {
     e.preventDefault();
 
-    const apiKey = apiKeyInput.value.trim();
-    if (!apiKey) {
-        showError('Please enter your OpenRouter API key.');
-        return;
-    }
-
     // Show loading state
     setLoading(true);
 
@@ -38,9 +31,7 @@ async function handleRegister(e) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                openrouter_api_key: apiKey,
-            }),
+            body: JSON.stringify({}),
         });
 
         const data = await response.json();
@@ -50,7 +41,7 @@ async function handleRegister(e) {
             currentUserId = data.user_id;
             showResult(data);
         } else {
-            showError(data.error || 'Registration failed. Please check your API key.');
+            showError(data.error || 'Registration failed. Please try again.');
         }
     } catch (err) {
         console.error('Registration error:', err);
@@ -106,7 +97,6 @@ function hideError() {
 
 function resetForm() {
     // Clear form
-    apiKeyInput.value = '';
     currentToken = null;
     currentUserId = null;
 

@@ -34,7 +34,7 @@ from .auth.token_manager import TokenManager
 from .auth.models import User
 from .database.user_store import UserStore
 from .database.vector_store import MultiTenantVectorStore
-from .integrations.openrouter import OpenRouterClient, OpenRouterClientManager
+from .integrations.ollama import OllamaClientManager
 from .mcp_handler import MCPHandler
 
 import sys
@@ -45,7 +45,7 @@ from config.settings import get_settings
 # === Pydantic Models ===
 
 class RegisterRequest(BaseModel):
-    openrouter_api_key: str
+    openrouter_api_key: Optional[str] = None
 
 
 class RegisterResponse(BaseModel):
@@ -100,8 +100,8 @@ token_manager = TokenManager(
     encryption_key=settings.encryption_key,
     expiration_days=settings.jwt_expiration_days,
 )
-client_manager = OpenRouterClientManager(
-    base_url=settings.openrouter_base_url,
+client_manager = OllamaClientManager(
+    base_url=settings.ollama_base_url,
     llm_model=settings.llm_model,
     embedding_model=settings.embedding_model,
 )
@@ -238,6 +238,7 @@ async def lifespan(app: FastAPI):
     print("SimpleMem MCP Server started")
     print(f"  - LLM Model: {settings.llm_model}")
     print(f"  - Embedding Model: {settings.embedding_model}")
+    print(f"  - Ollama URL: {settings.ollama_base_url}")
     print(f"  - Window Size: {settings.window_size}")
     print(f"  - Transport: Streamable HTTP (2025-03-26)")
 
@@ -278,27 +279,11 @@ app.add_middleware(
 
 @app.post("/api/auth/register", response_model=RegisterResponse)
 async def register(request: RegisterRequest):
-    """Register a new user with OpenRouter API key"""
+    """Register a new user for local Ollama-backed memory"""
     try:
-        # Validate API key with OpenRouter
-        client = OpenRouterClient(
-            api_key=request.openrouter_api_key,
-            base_url=settings.openrouter_base_url,
-        )
-        is_valid, error = await client.verify_api_key()
-        await client.close()
-
-        if not is_valid:
-            return RegisterResponse(
-                success=False,
-                error=f"Invalid OpenRouter API key: {error}",
-            )
-
         # Create user
         user = User()
-        user.openrouter_api_key_encrypted = token_manager.encrypt_api_key(
-            request.openrouter_api_key
-        )
+        user.openrouter_api_key_encrypted = token_manager.encrypt_api_key("local")
 
         # Save user
         user_store.create_user(user)

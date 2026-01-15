@@ -45,11 +45,23 @@ class Settings:
         "./data/users.db"
     ))
 
-    # OpenRouter Configuration
-    openrouter_base_url: str = "https://openrouter.ai/api/v1"
-    llm_model: str = "openai/gpt-4.1-mini"
-    embedding_model: str = "qwen/qwen3-embedding-4b"
-    embedding_dimension: int = 2560  # Custom embedding dimension
+    # Ollama Configuration
+    ollama_base_url: str = field(default_factory=lambda: os.getenv(
+        "OLLAMA_BASE_URL",
+        "http://localhost:11434"
+    ))
+    llm_model: str = field(default_factory=lambda: os.getenv(
+        "OLLAMA_LLM_MODEL",
+        "llama3.1:8b-instruct"
+    ))
+    embedding_model: str = field(default_factory=lambda: os.getenv(
+        "OLLAMA_EMBED_MODEL",
+        "nomic-embed-text"
+    ))
+    embedding_dimension: int = field(default_factory=lambda: int(os.getenv(
+        "OLLAMA_EMBED_DIM",
+        "768"
+    )))
 
     # Memory Building Configuration
     window_size: int = 20
